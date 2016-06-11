@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 public class NodeSelection : MonoBehaviour {
@@ -18,6 +16,7 @@ public class NodeSelection : MonoBehaviour {
     Dictionary<Vector2, Node> allNodes = new Dictionary<Vector2, Node>();
 
     public void AddNode(Vector2 _position, Node _node) {
+
         allNodes.Add(_position, _node);
     }
 
@@ -66,6 +65,13 @@ public class NodeSelection : MonoBehaviour {
         List<Vector2> selectedPositions = GetNodeSelection(_confirmedNodePosition, objectSelection.SelectedObjectSize, selectionRange);
 
         for (int n = 0; n < selectedPositions.Count; n++) {
+
+            //check the node we are filling if it is already confirmed, if it is, then we clear it from the parent.
+            if (allNodes[selectedPositions[n]].Confirmed)
+            {
+                ClearNodeFromParent(selectedPositions[n]);
+            }
+
             allNodes[selectedPositions[n]].Confirmed = true;
             allNodes[selectedPositions[n]].ConfirmedValue = objectSelection.SelectedObjectValue;
             allNodes[selectedPositions[n]].ParentNodePosition = _confirmedNodePosition;

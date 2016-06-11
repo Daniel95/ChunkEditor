@@ -106,6 +106,8 @@ public class ChunkEditor : MonoBehaviour
     public void EditANode(Vector2 _position, int _value)
     {
         editableChunk[(int)_position.x, (int)_position.y] = _value;
+
+        chunkLibary.CompressChunk(editableChunk);
     }
 
     public void SaveChunk()
@@ -144,8 +146,6 @@ public class ChunkEditor : MonoBehaviour
                 }
            }
         }
-
-        chunkLibary.CompressChunk(editableChunk);
     }
 
     /*

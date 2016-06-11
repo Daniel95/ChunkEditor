@@ -4,9 +4,6 @@ using System.Collections.Generic;
 
 public class ObjectsInNodeInfo : MonoBehaviour {
 
-    [SerializeField]
-    private List<Sprite> assignSprites;
-
     [Serializable]
     public class NodesInfo
     {
@@ -22,7 +19,6 @@ public class ObjectsInNodeInfo : MonoBehaviour {
     private static List<Sprite> nodeSprites = new List<Sprite>();
 
     private static List<Vector2> nodeSizes = new List<Vector2>();
-
 
     public static List<Sprite> NodeSprites
     {

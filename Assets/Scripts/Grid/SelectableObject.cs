@@ -4,12 +4,12 @@ using System.Collections;
 
 public class SelectableObject : MonoBehaviour {
 
-    private int objectNumber;
+    private int objectValue;
 
     private Vector2 objectSize;
 
     public void SetObjectNumber(int _objNumber) {
-        objectNumber = _objNumber;
+        objectValue = _objNumber;
 
         //save all the values in this selectable object, as listed in the ObjectInNodeInfo
         GetComponent<Image>().sprite = ObjectsInNodeInfo.NodeSprites[_objNumber];
@@ -17,11 +17,12 @@ public class SelectableObject : MonoBehaviour {
     }
 
     public void ChooseObject() {
-        GetComponentInParent<ObjectSelection>().ChangeObject(objectNumber, objectSize);
+        GetComponentInParent<ObjectSelection>().SelectObject(objectValue, objectSize);
     }
 
-    public int ObjectNumber {
-        set { objectNumber = value; }
+    public int ObjectValue
+    {
+        set { objectValue = value; }
     }
 
     public Vector2 ObjectSize

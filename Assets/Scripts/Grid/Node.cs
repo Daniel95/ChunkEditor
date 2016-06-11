@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class Node : MonoBehaviour {
 
@@ -7,13 +8,24 @@ public class Node : MonoBehaviour {
 
     private Vector2 size;
 
-    private int objNumber;
+    //our true value is the value that we will use in the final string
+    private int trueValue;
+
+    //the value we show we contain, if there is another node overlapping us
+    private int confirmedValue = 0;
+
+    private bool confirmed;
+
+    //the node that is overlapping us
+    private Vector2 parentNodePosition;
+
+    private int oldSpriteValue;
 
     private Image image;
 
     private Sprite sprite;
 
-    private ObjectSelection objectSelection;
+    private NodeSelection nodeSelection;
 
     private Color startColor;
 
@@ -21,50 +33,53 @@ public class Node : MonoBehaviour {
     private Color selectedColor;
 
     void Start() {
-        image.sprite = ObjectsInNodeInfo.NodeSprites[objNumber];
-        startColor = image.color;
-    }
-
-    void Awake() {
         image = GetComponent<Image>();
 
-        objectSelection = GameObject.Find("ObjectSelectionMenu").GetComponent<ObjectSelection>();
-    }
+        nodeSelection = GetComponentInParent<NodeSelection>();
+        nodeSelection.AddNode(position, this);
 
-    void OnDisable() {
-        objectSelection.DoneSelecting -= SetNewObject;
+        image.sprite = ObjectsInNodeInfo.NodeSprites[trueValue];
+        startColor = image.color;
     }
 
     public void Init(Vector2 _pos, int _objectValue, int _maxObjNumber) {
         position = _pos;
 
-        objNumber = _objectValue;
+        trueValue = _objectValue;
     }
 
-    public void ChangeObject() {
-        //set the color to selectedColor
-        image.color = selectedColor;
-
-        objectSelection.DoneSelecting += SetNewObject;
-
-        objectSelection.StartMenu(GetComponent<Node>());
+    public void Select(int _spriteValue) {
+        image.sprite = ObjectsInNodeInfo.NodeSprites[_spriteValue];
     }
 
-    public void SetNewObject(int _newObjNumber) {
-        //reset the color of the object
-        image.color = startColor;
-
-        objNumber = _newObjNumber;
-        image.sprite = ObjectsInNodeInfo.NodeSprites[objNumber];
-
-
-        //unsubscribe itself to the setnewobject method, because it is done editing
-        objectSelection.DoneSelecting -= SetNewObject;
+    public void Deselect()
+    {
+        if (!confirmed)
+        {
+            image.sprite = ObjectsInNodeInfo.NodeSprites[trueValue];
+        }
+        else
+        {
+            image.sprite = ObjectsInNodeInfo.NodeSprites[confirmedValue];
+        }
     }
 
     public void Reset() {
-        objNumber = 0;
-        image.sprite = ObjectsInNodeInfo.NodeSprites[objNumber];
+        trueValue = 0;
+        image.sprite = ObjectsInNodeInfo.NodeSprites[trueValue];
+    }
+
+    public void MouseOver() {
+        nodeSelection.SelectedNode(this);
+    }
+
+    public void MouseExit() {
+        
+    }
+
+    public void MouseDown()
+    {
+        nodeSelection.ConfirmNode(this);
     }
 
     public Vector2 Position {
@@ -73,11 +88,30 @@ public class Node : MonoBehaviour {
 
     public Vector2 Size
     {
+        set { size = value; }
         get { return size; }
     }
 
-    public int ObjNumber
+    public int TrueValue
     {
-        get { return objNumber; }
+        set { trueValue = value; }
+        get { return trueValue; }
+    }
+
+    public bool Confirmed
+    {
+        get { return confirmed; }
+        set { confirmed = value; }
+    }
+
+    public int ConfirmedValue
+    {
+        set { confirmedValue = value; }
+    }
+
+    public Vector2 ParentNodePosition
+    {
+        get { return parentNodePosition; }
+        set { parentNodePosition = value; }
     }
 }

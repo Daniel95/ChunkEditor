@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class ChunkEditor : MonoBehaviour
 {
@@ -101,7 +103,6 @@ public class ChunkEditor : MonoBehaviour
 
     private void EditANode(Vector2 _position, int _value)
     {
-        print(_position);
         editableChunk[(int)_position.x, (int)_position.y] = _value;
     }
 
@@ -123,121 +124,49 @@ public class ChunkEditor : MonoBehaviour
         }
     }
 
-    public void EditNodes(Vector2 _middlePosition, Vector2 _size, int _nodeValue) {
+    public void EditNodes(Vector2 _middlePosition, Vector2 _nodeSize, Vector2 _selectionSize, int _nodeValue)
+    {
         //the position we start editing
-        Vector2 positionToEdit = _middlePosition - new Vector2(Mathf.Floor(_size.x / 2), Mathf.Floor(_size.y / 2));
+        Vector2 positionToEdit = _middlePosition - new Vector2(Mathf.Floor(_nodeSize.x / 2), Mathf.Floor(_nodeSize.y / 2));
 
-        for (int y = 0; y < _size.y; y++) {
-            for (int x = 0; x < _size.x; x++) {
-                EditANode(positionToEdit + new Vector2(x,y), _nodeValue);
-            }
+        Vector2 selectionCount = new Vector2(_selectionSize.x / _nodeSize.x, _selectionSize.y / _nodeSize.y);
+
+        for (int y = 0; y < _nodeSize.y; y++)
+        {
+            for (int x = 0; x < _nodeSize.x; x++)
+            {
+                if (x - Mathf.Floor(_nodeSize.x / 2) % _nodeSize.x == 0 && y - Mathf.Floor(_nodeSize.y / 2) % _nodeSize.y == 0)
+                {
+                    EditANode(positionToEdit + new Vector2(x, y), _nodeValue);
+                    break;
+                }
+           }
         }
 
         chunkLibary.CompressChunk(editableChunk);
     }
 
     /*
-    public void FillNode(Vector2 _startingPosition, int _nodeObjectNumber, int _nodeSize)
-    {
-        //our current, 2d direction
-        int xDirection = 1;
+    public void EditNodes(Vector2 _middlePosition, Vector2 _nodeSize, Vector2 _selectionSize, int _nodeValue) {
+        //the position we start editing
+        Vector2 positionToEdit = _middlePosition - new Vector2(Mathf.Floor(_nodeSize.x / 2), Mathf.Floor(_nodeSize.y / 2));
 
-        int yDirection = 0;
+        Vector2 selectionCount = new Vector2(_selectionSize.x / _nodeSize.x, _selectionSize.y / _nodeSize.y);
 
-        int rowLengthToCheck = 1;
-
-        //index that we use to count
-        int index = 0;
-
-        //so we can check what the direction was when we last changed it
-        bool xWasPos = false;
-
-        bool yWasPos = true;
-
-        bool increaseRowLength = false;
-
-        while (CheckNodeOccupied((int)startingPosition.x, (int)startingPosition.y))
-        {
-            //go to the next node in the row
-            if (index < rowLengthToCheck)
+        for (int y = 0; y < _nodeSize.y; y++) {
+            if (y < _nodeSize.y * selectionCount.y)
             {
-                startingPosition.x += xDirection;
-                startingPosition.y += yDirection;
-
-                index++;
-            }
-            else
-            {
-                //reset the index
-                index = 0;
-
-                //go to the next direction for x and y
-                BackAndForth(ref xDirection, ref xWasPos);
-                BackAndForth(ref yDirection, ref yWasPos);
-
-                //increase row length alternately
-                if (increaseRowLength)
+                for (int x = 0; x < _nodeSize.x; x++)
                 {
-                    rowLengthToCheck++;
-                    increaseRowLength = false;
+                    if (x < _nodeSize.x * selectionCount.x)
+                    {
+                        EditANode(positionToEdit + new Vector2(x, y), _nodeValue);
+                    }
                 }
-                else
-                    increaseRowLength = true;
             }
         }
 
-        //check how many nodes are occupied
-        int occupiedNodeIndex = 0;
-
-        foreach (Node node in nodes)
-        {
-            if (node.Occupied)
-            {
-                occupiedNodeIndex++;
-            }
-        }
-
-        //calc the new node radius, so the camera can use that number to zoom in or out
-        occupatedNodesRowsRadius = OccupiedNodesRadius(occupiedNodeIndex);
-
-        if (xPosToChange < maxXLength && yPosToChange < maxYLength)
-        {
-            nodes[xPosToChange, yPosToChange].Occupied = true;
-            nodes[xPosToChange, yPosToChange].NodeNumber = _nodeNumber;
-
-            if (ChosenNode != null)
-                ChosenNode(nodes[xPosToChange, yPosToChange], nodeSize);
-        }
-    }
-
-    bool CheckNodeOccupied(int _x, int _y)
-    {
-        //check if the node is occupied, and check if the node we are checking exists
-        if (_x < maxXLength && _y < maxYLength)
-            return nodes[_x, _y].Occupied;
-        else
-            return false;
-    }
-
-    //goes back and forth between -1 and 1
-    private void BackAndForth(ref int _dir, ref bool _wasPos)
-    {
-        //if it is zero, what the direction was when we last changed it
-        if (_dir == 0)
-        {
-            if (_wasPos)
-                _dir = -1;
-            else
-                _dir = 1;
-        }
-        else //if it is positive or negative, set the bool positive or negative, and set the dir to zero
-        {
-            if (_dir > 0)
-                _wasPos = true;
-            else
-                _wasPos = false;
-            _dir = 0;
-        }
+        chunkLibary.CompressChunk(editableChunk);
     }
     */
 }

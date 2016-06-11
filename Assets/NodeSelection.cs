@@ -21,6 +21,16 @@ public class NodeSelection : MonoBehaviour {
         allNodes.Add(_position, _node);
     }
 
+    public void RemoveNode(Node _node)
+    {
+        if (_node.Confirmed)
+        {
+            ClearNodeFromParent(_node.Position);
+        }
+
+        allNodes.Remove(_node.Position);
+    }
+
     //the node has been clicked and confirmed
     public void ConfirmNode(Node _node)
     {
@@ -43,23 +53,11 @@ public class NodeSelection : MonoBehaviour {
     }
 
     //were we switch what value a node contains
-    public void ChangeObject(Vector2 _confirmedNodePosition, int _objectValue, Vector2 _newObjectSize)
+    private void ChangeObject(Vector2 _confirmedNodePosition, int _objectValue, Vector2 _newObjectSize)
     {
         //if the node we are changing has already been confirmed, we need to clear its parent and the nodes the parent overlaps
         if (allNodes[_confirmedNodePosition].Confirmed) {
-            //clear the parents true value, and value in the grid
-            allNodes[allNodes[_confirmedNodePosition].ParentNodePosition].TrueValue = 0;
-            chunkEditor.EditNodes(allNodes[allNodes[_confirmedNodePosition].ParentNodePosition].Position, allNodes[allNodes[_confirmedNodePosition].ParentNodePosition].Size, new Vector2(1, 1), 0);
-
-            //clear all nodes the parent overlaps
-            List<Vector2> positionToClear = GetNodeSelection(allNodes[allNodes[_confirmedNodePosition].ParentNodePosition].Position, allNodes[allNodes[_confirmedNodePosition].ParentNodePosition].Size, selectionRange);
-
-            for (int n = 0; n < positionToClear.Count; n++)
-            {
-                allNodes[positionToClear[n]].Confirmed = false;
-                allNodes[positionToClear[n]].ConfirmedValue = 0;
-                allNodes[positionToClear[n]].Deselect();
-            }
+            ClearNodeFromParent(_confirmedNodePosition);
         }
 
         chunkEditor.EditNodes(_confirmedNodePosition, _newObjectSize, new Vector2(1, 1), _objectValue);
@@ -73,6 +71,23 @@ public class NodeSelection : MonoBehaviour {
             allNodes[selectedPositions[n]].ParentNodePosition = _confirmedNodePosition;
             allNodes[selectedPositions[n]].Select(objectSelection.SelectedObjectValue);
             allNodes[selectedPositions[n]].Size = objectSelection.SelectedObjectSize;
+        }
+    }
+
+    private void ClearNodeFromParent(Vector2 _confirmedNodePosition) {
+        //clear the parents true value, and value in the grid
+        allNodes[allNodes[_confirmedNodePosition].ParentNodePosition].TrueValue = 0;
+
+        chunkEditor.EditANode(allNodes[allNodes[_confirmedNodePosition].ParentNodePosition].Position, 0);
+
+        //clear all nodes the parent overlaps
+        List<Vector2> positionToClear = GetNodeSelection(allNodes[allNodes[_confirmedNodePosition].ParentNodePosition].Position, allNodes[allNodes[_confirmedNodePosition].ParentNodePosition].Size, selectionRange);
+
+        for (int n = 0; n < positionToClear.Count; n++)
+        {
+            allNodes[positionToClear[n]].Confirmed = false;
+            allNodes[positionToClear[n]].ConfirmedValue = 0;
+            allNodes[positionToClear[n]].Deselect();
         }
     }
 

@@ -4,12 +4,14 @@ using System.Collections.Generic;
 
 public class ChunkEditor : MonoBehaviour
 {
-
     [SerializeField]
     private GenerateChunk generateChunk;
 
     [SerializeField]
     private ChunkHolder chunkLibary;
+
+    [SerializeField]
+    private NodeSelection nodeSelection;
 
     [SerializeField]
     private Transform buildPosition;
@@ -80,7 +82,7 @@ public class ChunkEditor : MonoBehaviour
             //the node y starts at 0, so if the node y is bigger or the same as Ylength, destroy it
             if (_node.Position.y >= ChunkHolder.CurrentYLength)
             {
-                Destroy(_node.gameObject);
+                _node.Delete();
             }
         }
     }
@@ -101,7 +103,7 @@ public class ChunkEditor : MonoBehaviour
         }
     }
 
-    private void EditANode(Vector2 _position, int _value)
+    public void EditANode(Vector2 _position, int _value)
     {
         editableChunk[(int)_position.x, (int)_position.y] = _value;
     }

@@ -48,6 +48,11 @@ public class Node : MonoBehaviour {
         trueValue = _objectValue;
     }
 
+    public void Delete() {
+        nodeSelection.RemoveNode(this);
+        Destroy(this.gameObject);
+    }
+
     public void Select(int _spriteValue) {
         image.sprite = ObjectsInNodeInfo.NodeSprites[_spriteValue];
     }

@@ -27,6 +27,7 @@ public class NodeSelection : MonoBehaviour {
             ClearNodeFromParent(_node.Position);
         }
 
+        lastPreviewedNodes.Remove(_node.Position);
         allNodes.Remove(_node.Position);
     }
 

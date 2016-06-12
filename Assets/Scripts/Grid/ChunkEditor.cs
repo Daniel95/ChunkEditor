@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class ChunkEditor : MonoBehaviour
 {
@@ -23,6 +21,8 @@ public class ChunkEditor : MonoBehaviour
 
     private int[,] editableChunk;
 
+    private bool removingNodes;
+
     void Awake()
     {
         editableChunk = new int[ChunkHolder.xLength, ChunkHolder.CurrentYLength];
@@ -30,13 +30,6 @@ public class ChunkEditor : MonoBehaviour
 
     public void EditChunkHeight()
     {
-        int[,] temporaryGrid = editableChunk;
-
-        //instantiate editableChunk again with a new y length
-        editableChunk = new int[ChunkHolder.xLength, ChunkHolder.CurrentYLength];
-
-        CopyValuesIn2dArray(temporaryGrid);
-
         //if last Y Length is lower then the current Y Length, add nodes to the chunk
         if (lastYLength < ChunkHolder.CurrentYLength)
         {
@@ -47,12 +40,19 @@ public class ChunkEditor : MonoBehaviour
             RemoveNodesFromChunk();
         }
 
+        int[,] temporaryGrid = editableChunk;
+
+        //instantiate editableChunk again with a new y length
+        editableChunk = new int[ChunkHolder.xLength, ChunkHolder.CurrentYLength];
+
+        CopyValuesIn2dArray(temporaryGrid);
+
         lastYLength = ChunkHolder.CurrentYLength;
 
         chunkLibary.CompressChunk(editableChunk);
     }
 
-    public void AddNodesToChunk()
+    private void AddNodesToChunk()
     {
         //the y length is the total length of the all the chunks, divided by its X length
         int currentYLength = transform.childCount / ChunkHolder.xLength;
@@ -74,7 +74,7 @@ public class ChunkEditor : MonoBehaviour
         }
     }
 
-    public void RemoveNodesFromChunk()
+    private void RemoveNodesFromChunk()
     {
         //destroy every chunk that does no longer exist in the editableChunk
         foreach (Node _node in transform.GetComponentsInChildren<Node>())

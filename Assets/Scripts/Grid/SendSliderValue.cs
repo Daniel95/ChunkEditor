@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
 public class SendSliderValue : MonoBehaviour {
 
     [SerializeField]

@@ -9,9 +9,6 @@ public class ChunkEditor : MonoBehaviour
     private ChunkHolder chunkLibary;
 
     [SerializeField]
-    private NodeSelection nodeSelection;
-
-    [SerializeField]
     private Transform buildPosition;
 
     [SerializeField]

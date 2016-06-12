@@ -70,6 +70,8 @@ public class Node : MonoBehaviour {
 
     public void Reset() {
         trueValue = 0;
+        confirmed = false;
+        confirmedValue = 0;
         image.sprite = ObjectsInNodeInfo.NodeSprites[trueValue];
     }
 

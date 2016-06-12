@@ -26,8 +26,6 @@ public class Node : MonoBehaviour {
 
     private NodeSelection nodeSelection;
 
-    private Color startColor;
-
     [SerializeField]
     private Color selectedColor;
 
@@ -38,7 +36,6 @@ public class Node : MonoBehaviour {
         nodeSelection.AddNode(position, this);
 
         image.sprite = ObjectsInNodeInfo.NodeSprites[trueValue];
-        startColor = image.color;
     }
 
     public void Init(Vector2 _pos, int _objectValue, int _maxObjNumber) {

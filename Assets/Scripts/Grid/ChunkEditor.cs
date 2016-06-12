@@ -130,7 +130,7 @@ public class ChunkEditor : MonoBehaviour
         //the position we start editing
         Vector2 positionToEdit = _middlePosition - new Vector2(Mathf.Floor(_nodeSize.x / 2), Mathf.Floor(_nodeSize.y / 2));
 
-        Vector2 selectionCount = new Vector2(_selectionSize.x / _nodeSize.x, _selectionSize.y / _nodeSize.y);
+        //Vector2 selectionCount = new Vector2(_selectionSize.x / _nodeSize.x, _selectionSize.y / _nodeSize.y);
 
         for (int y = 0; y < _nodeSize.y; y++)
         {

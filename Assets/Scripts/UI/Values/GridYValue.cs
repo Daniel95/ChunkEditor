@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GridYValue : ScoreBase {
+public class GridYValue : DynamicText {
 
     private int gridY;
 

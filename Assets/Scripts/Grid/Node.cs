@@ -24,28 +24,28 @@ public class Node : MonoBehaviour {
 
     private Sprite sprite;
 
-    private NodeSelection nodeSelection;
+    private NodeEditor nodeEditor;
 
     [SerializeField]
     private Color selectedColor;
 
-    void Start() {
+    void Awake() {
         image = GetComponent<Image>();
-
-        nodeSelection = GetComponentInParent<NodeSelection>();
-        nodeSelection.AddNode(position, this);
-
-        image.sprite = ObjectsInNodeInfo.NodeSprites[trueValue];
     }
 
     public void Init(Vector2 _pos, int _objectValue, int _maxObjNumber) {
         position = _pos;
 
         trueValue = _objectValue;
+
+        nodeEditor = GetComponentInParent<NodeEditor>();
+        nodeEditor.AddNode(position, this);
+
+        image.sprite = ObjectsInNodeInfo.NodeSprites[trueValue];
     }
 
     public void Delete() {
-        nodeSelection.RemoveNode(this);
+        nodeEditor.RemoveNode(this);
         Destroy(this.gameObject);
     }
 
@@ -73,7 +73,7 @@ public class Node : MonoBehaviour {
     }
 
     public void MouseOver() {
-        nodeSelection.SelectedNode(this);
+        nodeEditor.SelectedNode(this);
     }
 
     public void MouseExit() {
@@ -82,7 +82,7 @@ public class Node : MonoBehaviour {
 
     public void MouseDown()
     {
-        nodeSelection.ConfirmNode(this);
+        nodeEditor.ConfirmNode(this);
     }
 
     public Vector2 Position {

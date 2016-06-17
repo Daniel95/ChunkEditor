@@ -3,12 +3,12 @@
 public class CopySeed : MonoBehaviour {
 
     [SerializeField]
-    private SeedValue seedValue;
+    private SeedDisplay seedDisplay;
 
     public void CopyToClipBoard()
     {
         TextEditor te = new TextEditor();
-        te.text = seedValue.Seed;
+        te.text = seedDisplay.Seed;
         te.SelectAll();
         te.Copy();
     }

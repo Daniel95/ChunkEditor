@@ -1,11 +1,16 @@
-﻿public class SeedValue : ScoreBase {
-
+﻿public class SeedDisplay : DynamicText
+{
     private string seed;
 
-    public override void ChangeValue(string _change)
+    public void UpdateSeed(int[,] _chunk)
+    {
+        ChangeString(SeedConverter.CompressChunk(_chunk));
+    }
+
+    public override void ChangeString(string _change)
     {
         seed = _change;
-        base.ChangeValue(_change);
+        base.ChangeString(_change);
     }
 
     protected override void UpdateTextField()

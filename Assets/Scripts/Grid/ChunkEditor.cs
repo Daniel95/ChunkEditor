@@ -9,6 +9,9 @@ public class ChunkEditor : MonoBehaviour
     private ChunkHolder chunkLibary;
 
     [SerializeField]
+    private SeedDisplay seedDisplay;
+
+    [SerializeField]
     private Transform buildPosition;
 
     [SerializeField]
@@ -25,8 +28,10 @@ public class ChunkEditor : MonoBehaviour
         editableChunk = new int[ChunkHolder.xLength, ChunkHolder.CurrentYLength];
     }
 
-    public void EditChunkHeight()
+    public void EditChunkHeight(int _newYLength)
     {
+        ChunkHolder.CurrentYLength = _newYLength;
+
         //if last Y Length is lower then the current Y Length, add nodes to the chunk
         if (lastYLength < ChunkHolder.CurrentYLength)
         {
@@ -46,7 +51,7 @@ public class ChunkEditor : MonoBehaviour
 
         lastYLength = ChunkHolder.CurrentYLength;
 
-        chunkLibary.CompressChunk(editableChunk);
+        seedDisplay.UpdateSeed(editableChunk);
     }
 
     private void AddNodesToChunk()
@@ -62,11 +67,11 @@ public class ChunkEditor : MonoBehaviour
                 //spawn the editableChunk, positive x values are to the right, and negative y values are down. so this creates a grid from top left, to down right, just like the [,]. 
                 GameObject editableNode = (GameObject)Instantiate(editableNodePrefab, new Vector3(x * 33, -y * 33, 0) + buildPosition.position, transform.rotation) as GameObject;
 
-                //give the node his starting position and values
-                editableNode.GetComponent<Node>().Init(new Vector2(x, y), 0, generateChunk.objToSpawnNameLength());
-
                 //we are the parent of this node
                 editableNode.transform.SetParent(transform);
+
+                //give the node his starting position and values
+                editableNode.GetComponent<Node>().Init(new Vector2(x, y), 0, generateChunk.objToSpawnNameLength());
             }
         }
     }
@@ -104,7 +109,7 @@ public class ChunkEditor : MonoBehaviour
     {
         editableChunk[(int)_position.x, (int)_position.y] = _value;
 
-        chunkLibary.CompressChunk(editableChunk);
+        seedDisplay.UpdateSeed(editableChunk);
     }
 
     public void SaveChunk()
@@ -123,6 +128,8 @@ public class ChunkEditor : MonoBehaviour
         {
             _node.Reset();
         }
+
+        seedDisplay.UpdateSeed(editableChunk);
     }
 
     public void EditNodes(Vector2 _middlePosition, Vector2 _nodeSize, Vector2 _selectionSize, int _nodeValue)

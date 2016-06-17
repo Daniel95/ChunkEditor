@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+
 public class SendSliderValue : MonoBehaviour {
 
     [SerializeField]
@@ -24,7 +25,6 @@ public class SendSliderValue : MonoBehaviour {
     public void SendValue()
     {
         gridYValue.ChangeNumber((int)slider.value);
-        ChunkHolder.CurrentYLength = (int)slider.value;
-        chunkEditor.EditChunkHeight();
+        chunkEditor.EditChunkHeight((int)slider.value);
     }
 }

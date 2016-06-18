@@ -139,7 +139,8 @@ public class NodeEditor : MonoBehaviour {
         {
             for (int x = 0; x < ChunkHolder.xLength; x++)
             {
-                allNodes[new Vector2(x,y)].Deselect();
+                //allNodes[new Vector2(x,y)].Deselect();
+                allNodes[new Vector2(x, y)].Reset();
             }
         }
 

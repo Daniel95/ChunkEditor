@@ -14,6 +14,11 @@ public class SeedInput : MonoBehaviour {
     }
 
     public void RecieveSeedInput() {
-        nodeEditor.BuildSeed(inputfield.text);
+        if(inputfield.text.Length % ChunkHolder.xLength == 0)
+            nodeEditor.BuildSeed(inputfield.text);
+    }
+
+    public void ClearInput() {
+        inputfield.text = "";
     }
 }
